@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# PlatformIO
+.pio
+
+# LSP
+.clangd/
+.ccls
+.cache/
+
+compile_commands.json
