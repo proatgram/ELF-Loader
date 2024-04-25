@@ -11,8 +11,8 @@ class linked_list {
 
         }
 
-        inline ~linked_list() {
-            linked_element *element = get_last();
+        ~linked_list() {
+            linked_element *element = m_last;
 
             while (element != nullptr) {
                 linked_element *new_element = element->prev;
@@ -27,8 +27,6 @@ class linked_list {
         int add(T data) {
             linked_element *element = new linked_element{data};
             
-            m_size++;
-
             if (m_size == 0) {
                 m_first = element;
                 m_first->index = 0;
@@ -47,6 +45,8 @@ class linked_list {
             element->prev = m_last;
             m_last->next = element;
             m_last = element;
+
+            m_size++;
 
             return 0;
         }
@@ -75,6 +75,9 @@ class linked_list {
             element->prev = new_element;
 
             update_index(element, 1);
+            check_last();
+
+            m_size++;
 
             return 0;
         }
@@ -106,6 +109,9 @@ class linked_list {
             delete element;
 
             update_index(element->next, -1);
+            check_last();
+
+            m_size--;
 
             return 0;
         }
@@ -146,8 +152,8 @@ class linked_list {
         struct linked_element {
             T data;
 
-            T *next;
-            T *prev;
+            linked_element *next;
+            linked_element *prev;
 
             size_t index;
         };
@@ -159,6 +165,20 @@ class linked_list {
                 cur_element->index + modifier;
                 cur_element = cur_element->next;
             }
+        }
+
+        void check_last() {
+            linked_element *element = m_first;
+
+            if (m_first == nullptr) {
+                return;
+            }
+
+            while (element->next != nullptr) {
+                element = element->next;
+            }
+
+            m_last = element;
         }
 
         linked_element *m_first;
